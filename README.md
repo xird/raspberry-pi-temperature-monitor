@@ -2,6 +2,8 @@
 
 Temperature monitoring device for a ground source heat pump. Uses four ds18b20 temperature sensors and a Raspberry Pi Zero with wifi.
 
+See details in the blog post: https://blog.ampli.fi/temperature-monitoring-solution-based-on-raspberry-pi/
+
 ## Instructions
 
 ### Raspberry Pi setup
