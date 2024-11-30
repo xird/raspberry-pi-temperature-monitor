@@ -6,6 +6,15 @@
 const fs = require('fs');
 const https = require('https');
 
+// Use this for testing while developing.
+//const files = [
+  //'test/0',
+  //'test/3',
+  //'test/9',
+  //'test/e',
+//];
+
+// Change these to match the ids of your sensors.
 const files = [
   '/sys/bus/w1/devices/28-3ce1d4430fca/w1_slave',
   '/sys/bus/w1/devices/28-3ce1d443385f/w1_slave',

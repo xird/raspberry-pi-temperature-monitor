@@ -13,4 +13,4 @@ cd ..
 
 ## To test the API Gateway:
 
-curl -XPOST https://YOUR_API_GATEWAY_HOST_NAME/$default -d '{"temperature": "42"}'
+curl -XPOST https://YOUR_API_GATEWAY_HOST_NAME/ -d '{"temperature": "42"}'
