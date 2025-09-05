@@ -33,7 +33,7 @@ const getHtml = (dataDate) => {
             labels: graphData.dates,
             datasets: [
               {
-                label: 'From ground',
+                label: 'Compressor hot',
                 data: graphData.sensor_0,
                 borderWidth: 1
               },{
@@ -45,7 +45,7 @@ const getHtml = (dataDate) => {
                 data: graphData.sensor_9,
                 borderWidth: 1
               },{
-                label: 'To heater',
+                label: 'Compressor cold',
                 data: graphData.sensor_e,
                 borderWidth: 1
               },
@@ -59,7 +59,7 @@ const getHtml = (dataDate) => {
             scales: {
               y: {
                 min: 0,
-                max: 65,
+                max: 120,
               }
             }
           }
