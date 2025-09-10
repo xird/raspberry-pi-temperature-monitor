@@ -6,7 +6,7 @@
 const http = require('http');
 const fs = require('fs');
 
-const getHtml = (dataDate) => {
+const getHtml = (dataDate, limit, offset) => {
   const html = `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -22,7 +22,7 @@ const getHtml = (dataDate) => {
       </div>
 
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script src="data.json?date=${dataDate}"></script>
+      <script src="data.json?date=${dataDate}&offset=${offset}&limit=${limit}"></script>
 
       <script>
         const ctx = document.getElementById('myChart');
@@ -35,19 +35,27 @@ const getHtml = (dataDate) => {
               {
                 label: 'Compressor hot',
                 data: graphData.sensor_0,
-                borderWidth: 1
+                borderWidth: 1,
+                borderColor: 'red',
+                //backgroundColor: 'red',
               },{
                 label: 'To ground',
                 data: graphData.sensor_3,
-                borderWidth: 1
+                borderWidth: 1,
+		borderColor: 'green',
+		borderColor: 'green',
               },{
                 label: 'From heater',
                 data: graphData.sensor_9,
-                borderWidth: 1
+                borderWidth: 1,
+                borderColor: 'orange',
+                borderColor: 'orange',
               },{
                 label: 'Compressor cold',
                 data: graphData.sensor_e,
-                borderWidth: 1
+                borderWidth: 1,
+                borderColor: 'blue',
+                borderColor: 'blue',
               },
             ]
           },
@@ -72,7 +80,9 @@ const getHtml = (dataDate) => {
   return html;
 };
 
-const getGraphData = (dataDate) => {
+const getGraphData = (dataDate, limit, offset) => {
+  limit = parseInt(limit);
+  offset = parseInt(offset);
   const graphData = {
     dates: [],
     sensor_0: [],
@@ -85,7 +95,18 @@ const getGraphData = (dataDate) => {
   if (fs.existsSync(fileName)) {
     const rawData = fs.readFileSync(fileName).toString();
     const lines = rawData.split("\n");
+    let linesProcessed = 0;
+    let linesSelected = 0;
     for (const line of lines) {
+      linesProcessed++;
+      if (offset && linesProcessed <= offset) {
+        continue;
+      }
+
+      linesSelected++;
+      if (limit && limit <= linesSelected) {
+        continue;
+      }
       const values = line.split(',');
       graphData.dates.push(values[0]);
       graphData.sensor_0.push(values[1]);
@@ -103,17 +124,18 @@ http.createServer(function (req, res) {
   const url = new URL(`${protocol}:${req.headers.host}${req.url}`);
   const d = new Date();
   const dataDate = url.searchParams.get('date') || d.toISOString().substring(0, 10);
-
+  const offset = url.searchParams.get('offset') || 0;
+  const limit = url.searchParams.get('limit') || 0;
   switch(url.pathname) {
     // Serve main page HTML
     case '/':
-      res.write(getHtml(dataDate));
+      res.write(getHtml(dataDate, limit, offset));
       res.end();
       break;
 
     // Serve the graph data
     case '/data.json':
-      const graphData = getGraphData(dataDate);
+      const graphData = getGraphData(dataDate, limit, offset);
       res.write('const graphData = ' + JSON.stringify(graphData) + ';');
       res.end();
       break;
