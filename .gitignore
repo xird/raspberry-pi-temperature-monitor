@@ -1,5 +1,2 @@
-terraform/lambda/node_modules
-terraform/lambda_function.zip
-terraform/.terraform/
 telegram.json
 alertSent
