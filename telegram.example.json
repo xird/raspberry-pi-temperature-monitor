@@ -1,0 +1,4 @@
+{
+  "botToken": "123456789:YOUR_BOT_TOKEN",
+  "chatIds": [111111111, 222222222]
+}

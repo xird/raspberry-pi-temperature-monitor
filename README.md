@@ -42,6 +42,7 @@ Copy the following files from the repository root to:
 ```
 /home/monitor/monitor/server.js
 /home/monitor/monitor/reader.js
+/home/monitor/monitor/notify.js
 /home/monitor/monitor/enable.sh
 ```
 
@@ -52,6 +53,16 @@ chmod +x /home/monitor/monitor/enable.sh
 ```
 
 Go to `/sys/bus/w1/devices/` and run `ls`. You should see your temperature sensors as directories named `28-xxxxxxxxxxxx`. Edit reader.js, and replace the “files” array values with the ids of your sensors.
+
+### Set up Telegram alerts
+
+When the temperature of the water coming from the heater drops too low, an alert is sent to Telegram.
+
+* In Telegram, talk to [@BotFather](https://t.me/BotFather), send `/newbot` and follow the instructions. Save the bot token you get.
+* Everyone who should receive alerts opens a chat with the new bot and presses Start (or sends it any message).
+* Open `https://api.telegram.org/bot<TOKEN>/getUpdates` in a browser and note the `chat.id` value of each person.
+* Copy `telegram.example.json` to `/home/monitor/monitor/telegram.json` and fill in the token and chat ids.
+* Send a test message: `node /home/monitor/monitor/notify.js "Test"`
 
 ### Add cron jobs
 
